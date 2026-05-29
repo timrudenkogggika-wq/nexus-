@@ -391,8 +391,10 @@ async function handleSubmit() {
   document.getElementById('form-area').classList.add('hidden');
   document.getElementById('loading-area').classList.remove('hidden');
 
-  try {
-    await fetch(`${SCRIPT_URL}?action=add&firstName=${encodeURIComponent(fn)}&lastName=${encodeURIComponent(ln)}`, {mode:'no-cors'});
+  // Use image trick to bypass CORS
+  const img = new Image();
+  img.src = `${SCRIPT_URL}?action=add&firstName=${encodeURIComponent(fn)}&lastName=${encodeURIComponent(ln)}`;
+  img.onload = img.onerror = function() {
     members.push({firstName:fn, lastName:ln, date: new Date().toLocaleString('ru-RU')});
     updateCounter();
     document.getElementById('firstName').value = '';
@@ -403,10 +405,7 @@ async function handleSubmit() {
       document.getElementById('success-area').classList.add('hidden');
       document.getElementById('form-area').classList.remove('hidden');
     }, 3500);
-  } catch(e) {
-    document.getElementById('loading-area').classList.add('hidden');
-    document.getElementById('form-area').classList.remove('hidden');
-  }
+  };
 }
 
 function toggleAdmin() {
