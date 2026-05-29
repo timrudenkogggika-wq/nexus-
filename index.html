@@ -392,7 +392,7 @@ async function handleSubmit() {
   document.getElementById('loading-area').classList.remove('hidden');
 
   try {
-    await fetch(`${SCRIPT_URL}?action=add&firstName=${encodeURIComponent(fn)}&lastName=${encodeURIComponent(ln)}`);
+    await fetch(`${SCRIPT_URL}?action=add&firstName=${encodeURIComponent(fn)}&lastName=${encodeURIComponent(ln)}`, {mode:'no-cors'});
     members.push({firstName:fn, lastName:ln, date: new Date().toLocaleString('ru-RU')});
     updateCounter();
     document.getElementById('firstName').value = '';
