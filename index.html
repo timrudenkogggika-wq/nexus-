@@ -199,7 +199,7 @@
 </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwWBNawopRvfkfhB2dyBb70aFhLE3AhHhBwA7cK4bUSIpUwWtlRAaGmAPiuA7S3WQC7vw/exec';
+const SCRIPT_URL = '/.netlify/functions/data';
 const ADMIN_CODE = '1152';
 let members = [];
 let adminOpen = false;
@@ -350,11 +350,13 @@ function setLang(lang) {
   if (!document.getElementById('adminDash').classList.contains('hidden')) renderDash();
 }
 
-async function loadMembers() {
+async async function loadMembers() {
   try {
     const r = await fetch(SCRIPT_URL + '?action=get');
     const data = await r.json();
-    members = data.map(row => ({firstName:row[0], lastName:row[1], date:row[2]}));
+    members = Array.isArray(data) ? data.filter(r => r && r[0] && r[0] !== '').map(row => ({
+      firstName: row[0] || '', lastName: row[1] || '', date: row[2] || ''
+    })) : [];
     updateCounter();
   } catch(e) {
     updateCounter();
